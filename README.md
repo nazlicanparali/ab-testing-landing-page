@@ -1,10 +1,6 @@
 # A/B Test Analysis: New vs. Old Landing Page
 
-An end-to-end statistical analysis of a website A/B test. The goal is to decide whether a redesigned landing page converts more visitors than the current one, and to back that decision with sound experiment design rather than a single p-value.
-
-## Business question
-
-Should the company launch the new landing page (`new_page`) in place of the old one (`old_page`)?
+Analysis of a website A/B test: does a new landing page convert more visitors than the old one?
 
 ## Dataset
 
@@ -22,13 +18,13 @@ The data is not included in this repository. Download `ab_data.csv` from Kaggle 
 
 ## Approach
 
-1. **Data quality checks:** missing values, users shown a page that does not match their assigned group, and duplicate users. Affected rows are removed and the counts are reported.
-2. **Experiment design:** hypotheses, significance level, minimum detectable effect (MDE), required sample size and power analysis, plus the smallest effect the actual sample could detect.
-3. **Sample ratio mismatch (SRM) check:** a chi-square test on group sizes to confirm the traffic split looks random.
-4. **Exploratory analysis:** conversion rates with Wilson confidence intervals, and daily conversion rates to check stability over time.
-5. **Hypothesis test:** two-proportion z-test, confidence intervals for the absolute difference and the rate ratio, and a chi-square test as a cross-check.
-6. **Decision:** a recommendation that combines statistical significance with practical significance (the confidence interval compared with the MDE).
-7. **Limitations and next steps.**
+1. Data checks: missing values, users whose page doesn't match their group, duplicate users.
+2. Experiment design: hypotheses, α, power, MDE (1 point) and the required sample size.
+3. Sample ratio mismatch check (chi-square on the group sizes).
+4. Conversion rates with Wilson CIs and daily rates over time.
+5. Two-proportion z-test, CIs for the difference and the rate ratio, chi-square as a check.
+6. Decision: significance and the CI compared with the MDE.
+7. Limitations.
 
 ## Results
 
@@ -42,12 +38,12 @@ After cleaning (3,893 rows with mismatched group/page and 1 duplicate user remov
 - Difference (new - old): **-0.16 percentage points**, 95% CI [-0.39, +0.08], p = 0.19 (two-proportion z-test; the chi-square check gives the same p-value).
 - Relative lift: -1.3%, 95% CI for the rate ratio [0.968, 1.007].
 - With this sample size the test could detect an absolute lift of about 0.34 points at 80% power, well below the planned MDE of 1 point.
-- **Recommendation:** no evidence that the new page converts better, and the confidence interval rules out an improvement as large as the 1-point MDE. Do not launch the new page for conversion reasons; keep the old page unless other considerations (cost, brand) justify the change.
+- Recommendation: don't launch the new page for conversion. There is no significant difference, and the upper end of the CI (+0.08 points) is far below the 1-point MDE, so the improvement we were looking for is very unlikely.
 
 ## How to run
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/nazlicanparali/ab-testing-landing-page.git
 cd ab-testing-landing-page
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
@@ -57,7 +53,7 @@ pip install -r requirements.txt
 jupyter notebook ab_test_analysis.ipynb
 ```
 
-Experiment settings (significance level, power and MDE) are defined in the first code cell of the notebook. Changing them updates every result and conclusion below it.
+α, power and the MDE are set in the first code cell of the notebook.
 
 ## Tools
 
